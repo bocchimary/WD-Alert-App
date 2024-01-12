@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wi-Fi Networks</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Nearby Wi-Fi Networks</h1>
+
+<ul id="wifiList"></ul>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const wifiList = document.getElementById('wifiList');
+
+    // Initialize wifi module
+    const wifi = require('node-wifi');
+    wifi.init({
+      iface: null // Use the first wireless network interface found
+    });
+
+    // Scan for nearby Wi-Fi networks
+    wifi.scan((error, networks) => {
+      if (error) {
+        console.error(error);
+        return;
+      }
+
+      // Display the nearby Wi-Fi networks
+      networks.forEach(network => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${network.ssid} (${network.bssid}) - Signal strength: ${network.signal_level}`;
+        wifiList.appendChild(listItem);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
